@@ -6,17 +6,17 @@ import mjolnir from "../../resources/img/mjolnir.png";
 import Spinner from "../spiner/Spiner";
 
 class RandomChar extends Component {
-  constructor(props) {
-    super(props);
-    this.updateChar();
-  }
-
   state = {
     char: {},
     loading: true,
     error: false,
   };
+
   marvelServic = new MarvelServic();
+
+  componentDidMount() {
+    this.updateChar();
+  }
 
   onCharLoaded = (char) => {
     this.setState({ char, loading: false });
@@ -29,7 +29,9 @@ class RandomChar extends Component {
 
   updateChar = () => {
     const id = Math.floor(Math.random() * (20 - 1) + 1);
+
     this.setState({ loading: true, error: false });
+
     this.marvelServic
       .getCharacter(id)
       .then(this.onCharLoaded)
@@ -48,6 +50,7 @@ class RandomChar extends Component {
         ) : (
           <View char={char} />
         )}
+
         <div className="randomchar__static">
           <p className="randomchar__title">
             Random character for today!
@@ -55,7 +58,11 @@ class RandomChar extends Component {
             Do you want to get to know him better?
           </p>
           <p className="randomchar__title">Or choose another one</p>
-          <button className="button button__main">
+          <button
+            className="button button__main"
+            onClick={this.updateChar}
+            disabled={loading}
+          >
             <div className="inner">try it</div>
           </button>
           <img src={mjolnir} alt="mjolnir" className="randomchar__decoration" />
