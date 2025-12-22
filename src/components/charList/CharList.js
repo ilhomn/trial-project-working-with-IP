@@ -3,18 +3,15 @@ import "./charList.scss";
 import MarvelServic from "../../services/MarvelServic";
 
 class CharList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      chars: [],
-      loading: true,
-    };
-  }
+  state = {
+    chars: [],
+    loading: true,
+  };
+
+  marvelServic = new MarvelServic();
 
   componentDidMount() {
-    const marvelServic = new MarvelServic();
-
-    marvelServic.getAllCharacters().then((chars) => {
+    this.marvelServic.getAllCharacters().then((chars) => {
       this.setState({
         chars,
         loading: false,
@@ -29,12 +26,17 @@ class CharList extends Component {
       <div className="char__list">
         <ul className="char__grid">
           {chars.map((char) => (
-            <li className="char__item" key={char.id}>
+            <li
+              className="char__item"
+              key={char.id}
+              onClick={() => this.props.onCharSelected(char.id)}
+            >
               <img src={char.thumbnail} alt={char.name} />
               <div className="char__name">{char.name}</div>
             </li>
           ))}
         </ul>
+
         <button className="button button__main button__long">
           <div className="inner">load more</div>
         </button>

@@ -22,6 +22,7 @@ class MarvelServic {
     const res = await this.getResource(
       `${this._apiBase}/characters/${id}?${this.apikey}`
     );
+    console.log(res);
     return this._transformCharacter(res.data.results[0]);
   };
 
@@ -30,8 +31,9 @@ class MarvelServic {
       name: char.name,
       description: char.description,
       thumbnail: char.thumbnail.path + "." + char.thumbnail.extension,
-      homepage: char.urls[0].url,
-      wiki: char.urls[1].url,
+      homepage: char.urls[0]?.url || "#",
+      wiki: char.urls[1]?.url || "#",
+      comics: char.comics.items, 
     };
   };
 }

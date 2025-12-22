@@ -22,14 +22,16 @@ class RandomChar extends Component {
     this.setState({ char, loading: false });
   };
 
+  onCharLoading = () => {
+    this.setState({ loading: true });
+  };
   onError = (err) => {
     this.setState({ loading: false, error: true });
     console.error("Error loading character:", err);
   };
-
   updateChar = () => {
     const id = Math.floor(Math.random() * (20 - 1) + 1);
-
+    this.onCharLoading();
     this.setState({ loading: true, error: false });
 
     this.marvelServic
@@ -37,7 +39,6 @@ class RandomChar extends Component {
       .then(this.onCharLoaded)
       .catch(this.onError);
   };
-
   render() {
     const { char, loading, error } = this.state;
 
