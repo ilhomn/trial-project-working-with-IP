@@ -1,30 +1,27 @@
-class MarvelServic {
-  _apiBase = "https://marvel-server-zeta.vercel.app";
-  apikey = "apikey=d4eecb0c66dedbfae4eab45d312fc1df";
+class MarvelService {
+  _apiBase = "https://marvel-server-zeta.vercel.app/";
+  _apiKey = "apikey=d4eecb0c66dedbfae4eab45d312fc1df";
+  _baseOffset = 0;
 
   getResource = async (url) => {
     const res = await fetch(url);
-
     if (!res.ok) {
       throw new Error(`Could not fetch ${url}, status: ${res.status}`);
     }
-
     return await res.json();
   };
 
-  getAllCharacters = async () => {
+  getAllCharacters = async (offset = this._baseOffset) => {
     const res = await this.getResource(
-      `${this._apiBase}/characters?limit=9&${this.apikey}`
+      `${this._apiBase}characters?limit=9&offset=${offset}&${this._apiKey}`
     );
     return res.data.results.map(this._transformCharacter);
   };
 
   getCharacter = async (id) => {
     const res = await this.getResource(
-      `${this._apiBase}/characters/${id}?${this.apikey}`
+      `${this._apiBase}characters/${id}?${this._apiKey}`
     );
-    console.log(res.data.results[0].comics);
-
     return this._transformCharacter(res.data.results[0]);
   };
 
@@ -32,13 +29,13 @@ class MarvelServic {
     return {
       id: char.id,
       name: char.name,
-      description: char.description,
-      thumbnail: `${char.thumbnail.path}.${char.thumbnail.extension}`,
+      description: char.description || "No description available",
+      thumbnail: char.thumbnail.path + "." + char.thumbnail.extension,
       homepage: char.urls[0]?.url || "#",
       wiki: char.urls[1]?.url || "#",
-      comics: char.comics.items,
+      comics: char.comics.items.map((c) => c.name), // <- только имена комиксов
     };
   };
 }
 
-export default MarvelServic;
+export default MarvelService;
