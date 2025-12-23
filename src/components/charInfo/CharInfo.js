@@ -81,6 +81,7 @@ class CharInfo extends Component {
 
 const View = ({ char }) => {
   const { name, description, thumbnail, homepage, wiki, comics } = char;
+  //   console.log(comics);
 
   let imgStyle = { objectFit: "cover" };
   if (
@@ -109,16 +110,17 @@ const View = ({ char }) => {
       <div className="char__descr">{description}</div>
       <div className="char__comics">Comics:</div>
       <ul className="char__comics-list">
-        {comics.length > 0 ? null : "There is no comics with this character"}
-        {comics.map((item, i) => {
-          // eslint-disable-next-line
-          if (i > 9) return;
-          return (
+        {comics.length === 0 ? (
+          <li className="char__comics-item">
+            There is no comics with this character
+          </li>
+        ) : (
+          comics.slice(0, 10).map((item, i) => (
             <li key={i} className="char__comics-item">
-              {item.name}
+              {item}
             </li>
-          );
-        })}
+          ))
+        )}
       </ul>
     </>
   );
