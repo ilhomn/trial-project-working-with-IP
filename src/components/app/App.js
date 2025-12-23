@@ -11,7 +11,6 @@ class App extends Component {
     selectedChar: null,
   };
 
-  // ✅ Проп с правильным регистром
   onCharSelected = (id) => {
     this.setState({
       selectedChar: id,

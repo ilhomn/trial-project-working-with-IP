@@ -34,12 +34,14 @@ class CharInfo extends Component {
   };
 
   onCharLoaded = (char) => {
-    this.setState({ char, loading: false });
+    this.setState({
+      char,
+      loading: false,
+    });
   };
 
-  onError = (err) => {
+  onError = () => {
     this.setState({ loading: false, error: true });
-    console.error("Error loading character:", err);
   };
 
   render() {
@@ -67,15 +69,7 @@ const View = ({ char }) => {
   return (
     <>
       <div className="char__basics">
-        <img
-          src={thumbnail}
-          alt={name}
-          style={{
-            objectFit: thumbnail.includes("image_not_available")
-              ? "contain"
-              : "cover",
-          }}
-        />
+        <img src={thumbnail} alt={name} />
 
         <div>
           <div className="char__info-name">{name}</div>
@@ -109,9 +103,9 @@ const View = ({ char }) => {
         {comics.length === 0 ? (
           <li className="char__comics-item">No comics available</li>
         ) : (
-          comics.map((item, i) => (
+          comics.slice(0, 10).map((item, i) => (
             <li className="char__comics-item" key={i}>
-              {item.name}
+              {item}
             </li>
           ))
         )}
